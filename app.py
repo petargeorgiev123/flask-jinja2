@@ -1,3 +1,4 @@
+import ccy
 from flask import Flask, render_template, abort
 
 app = Flask(__name__)
@@ -38,6 +39,24 @@ def product(key):
     if not product:
         abort(404)
     return render_template('product.html', product=product)
+
+@app.context_processor
+def some_processor():
+    def full_name(product):
+        return '{0} / {1}'.format(product['category'], product['name'])
+    return {'full_name': full_name}
+
+
+@app.template_filter('full_name')
+def full_name_filter(product):
+    return '{0} / {1}'.format(product['category'], product['name'])
+
+
+@app.template_filter('format_currency')
+def format_currency_filter(amount):
+    #TODO Ask tomorrow about this error!
+    currency_code = "USD" #ccy.countryccy(request.accept_languages.best[-2:])
+    return '{0} {1}'.format(currency_code, amount)
 
 
 if __name__ == '__main__':
