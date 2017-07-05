@@ -1,7 +1,10 @@
 import ccy
 from flask import Flask, render_template, abort
+from momentjs import momentjs
 
 app = Flask(__name__)
+
+app.jinja_env.globals['momentjs'] = momentjs
 
 PRODUCTS = {
     'iphone': {
